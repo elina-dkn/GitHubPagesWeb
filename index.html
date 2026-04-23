@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Gym progress thing</title>
+  <title>Gym Tracker</title>
 </head>
 <body>
-Main page for tracking gym progress. Choose Account:
-    <button onclick="ElinaAccount()">Elina</button>
-    <script>
-        function ElinaAccount(){
-            document.write("<p>Pressed Elina</p>")
-        }
-    </script>
+  <h1>Select User</h1>
 
+  <button onclick="selectUser('elina')">Elina</button>
+  <button onclick="selectUser('alex')">Alex</button>
 
+  <script>
+    function selectUser(user) {
+      localStorage.setItem("currentUser", user);
+      window.location.href = "user.html";
+    }
+  </script>
 </body>
 </html>
