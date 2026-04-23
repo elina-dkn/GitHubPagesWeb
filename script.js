@@ -1,37 +1,32 @@
-const user = localStorage.getItem("currentUser");
-document.getElementById("username").innerText = user + "'s Workout";
-
-const table = document.getElementById("tableBody");
-
-// Load exercises or create default
-function getExercises() {
-  let data = localStorage.getItem(user + "_exercises");
-  return data ? JSON.parse(data) : ["Bench Press", "Squat"];
-}
-
-function saveExercises(exercises) {
-  localStorage.setItem(user + "_exercises", JSON.stringify(exercises));
-}
-
-// Render table
 const list = document.getElementById("exerciseList");
 
-function render() {
-  list.innerHTML = "";
-  const exercises = getExercises();
+// Load data
+function getData() {
+  return JSON.parse(localStorage.getItem("exercises")) || [];
+}
 
-  exercises.forEach((ex, index) => {
+// Save data
+function saveData(data) {
+  localStorage.setItem("exercises", JSON.stringify(data));
+}
+
+// Render exercises
+function render() {
+  const data = getData();
+  list.innerHTML = "";
+
+  data.forEach((ex, index) => {
     const card = document.createElement("div");
     card.className = "card";
 
-    // Name input
+    // Name
     const nameInput = document.createElement("input");
     nameInput.className = "exercise-name";
-    nameInput.value = ex;
+    nameInput.value = ex.name;
 
     nameInput.addEventListener("change", () => {
-      exercises[index] = nameInput.value;
-      saveExercises(exercises);
+      data[index].name = nameInput.value;
+      saveData(data);
       render();
     });
 
@@ -39,26 +34,30 @@ function render() {
     const row = document.createElement("div");
     row.className = "row";
 
-    // Weight input
+    // Weight
     const weightInput = document.createElement("input");
     weightInput.type = "number";
     weightInput.className = "weight-input";
-
-    const key = user + "_" + ex;
-    weightInput.value = localStorage.getItem(key) || "";
+    weightInput.value = ex.current || "";
 
     weightInput.addEventListener("input", () => {
-      localStorage.setItem(key, weightInput.value);
+      data[index].current = Number(weightInput.value);
+
+      if (!data[index].best || data[index].current > data[index].best) {
+        data[index].best = data[index].current;
+      }
+
+      saveData(data);
     });
 
-    // Delete button
+    // Delete
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "delete-btn";
     deleteBtn.innerText = "Delete";
 
     deleteBtn.onclick = () => {
-      exercises.splice(index, 1);
-      saveExercises(exercises);
+      data.splice(index, 1);
+      saveData(data);
       render();
     };
 
@@ -72,20 +71,24 @@ function render() {
   });
 }
 
-// Add new exercise
+// Add exercise
 function addExercise() {
   const input = document.getElementById("newExercise");
   const value = input.value.trim();
 
   if (!value) return;
 
-  const exercises = getExercises();
-  exercises.push(value);
+  const data = getData();
 
-  saveExercises(exercises);
+  data.push({
+    name: value,
+    current: 0,
+    best: 0
+  });
+
+  saveData(data);
   input.value = "";
   render();
 }
 
-// Initial render
 render();

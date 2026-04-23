@@ -2,21 +2,18 @@ const CACHE_NAME = "gym-tracker-v1";
 
 const urlsToCache = [
   "index.html",
-  "user.html",
+  "progress.html",
   "style.css",
-  "script.js"
+  "script.js",
+  "progress.js"
 ];
 
-// Install
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(urlsToCache);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
 });
 
-// Fetch (offline support)
 self.addEventListener("fetch", event => {
   event.respondWith(
     caches.match(event.request).then(response => {
