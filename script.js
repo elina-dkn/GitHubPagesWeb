@@ -1,16 +1,17 @@
 const list = document.getElementById("exerciseList");
 
-// Load data
 function getData() {
   return JSON.parse(localStorage.getItem("exercises")) || [];
 }
 
-// Save data
 function saveData(data) {
   localStorage.setItem("exercises", JSON.stringify(data));
 }
 
-// Render exercises
+function today() {
+  return new Date().toISOString().split("T")[0];
+}
+
 function render() {
   const data = getData();
   list.innerHTML = "";
@@ -34,18 +35,22 @@ function render() {
     const row = document.createElement("div");
     row.className = "row";
 
-    // Weight
+    // Weight input
     const weightInput = document.createElement("input");
     weightInput.type = "number";
     weightInput.className = "weight-input";
-    weightInput.value = ex.current || "";
 
-    weightInput.addEventListener("input", () => {
-      data[index].current = Number(weightInput.value);
+    weightInput.value = ex.logs?.at(-1)?.weight || "";
 
-      if (!data[index].best || data[index].current > data[index].best) {
-        data[index].best = data[index].current;
-      }
+    weightInput.addEventListener("change", () => {
+      const value = Number(weightInput.value);
+
+      if (!data[index].logs) data[index].logs = [];
+
+      data[index].logs.push({
+        date: today(),
+        weight: value
+      });
 
       saveData(data);
     });
@@ -71,7 +76,6 @@ function render() {
   });
 }
 
-// Add exercise
 function addExercise() {
   const input = document.getElementById("newExercise");
   const value = input.value.trim();
@@ -82,8 +86,7 @@ function addExercise() {
 
   data.push({
     name: value,
-    current: 0,
-    best: 0
+    logs: []
   });
 
   saveData(data);

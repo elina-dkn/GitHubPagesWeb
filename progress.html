@@ -2,25 +2,26 @@
 <html>
 <head>
   <title>Progress</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="manifest" href="manifest.json">
+
   <link rel="stylesheet" href="style.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
   <h2>Progress</h2>
 
-  <div id="progressList"></div>
+  <select id="exerciseSelect"></select>
 
-  <a href="index.html" class="nav-btn">Back</a>
+  <canvas id="chart"></canvas>
+
+  <a class="nav-btn" href="index.html">Back</a>
 
   <script src="progress.js"></script>
-
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js");
-    }
-  </script>
 
 </body>
 </html>

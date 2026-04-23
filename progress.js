@@ -1,35 +1,57 @@
-const list = document.getElementById("progressList");
+const data = JSON.parse(localStorage.getItem("exercises")) || [];
 
-function getData() {
-  return JSON.parse(localStorage.getItem("exercises")) || [];
-}
+const select = document.getElementById("exerciseSelect");
+const ctx = document.getElementById("chart");
 
-function render() {
-  const data = getData();
-  list.innerHTML = "";
+let chart;
 
-  data.forEach(ex => {
-    const container = document.createElement("div");
-    container.className = "progress-card";
+// Fill dropdown
+data.forEach((ex, i) => {
+  const option = document.createElement("option");
+  option.value = i;
+  option.textContent = ex.name;
+  select.appendChild(option);
+});
 
-    const title = document.createElement("div");
-    title.innerText = `${ex.name} (${ex.current || 0} kg)`;
+select.addEventListener("change", renderChart);
 
-    const bar = document.createElement("div");
-    bar.className = "progress-bar";
+function renderChart() {
+  const ex = data[select.value];
+  if (!ex || !ex.logs) return;
 
-    const fill = document.createElement("div");
-    fill.className = "progress-fill";
+  const sorted = [...ex.logs].sort((a, b) =>
+    new Date(a.date) - new Date(b.date)
+  );
 
-    const percent = ex.best ? (ex.current / ex.best) * 100 : 0;
-    fill.style.width = percent + "%";
+  const labels = sorted.map(l => l.date);
+  const values = sorted.map(l => l.weight);
 
-    bar.appendChild(fill);
-    container.appendChild(title);
-    container.appendChild(bar);
+  if (chart) chart.destroy();
 
-    list.appendChild(container);
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: ex.name,
+        data: values,
+        borderWidth: 2,
+        tension: 0.2
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: false
+        }
+      }
+    }
   });
 }
 
-render();
+// init
+if (data.length > 0) {
+  select.value = 0;
+  renderChart();
+}
