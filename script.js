@@ -1,33 +1,57 @@
-const exercises = ["Bench Press", "Squat", "Deadlift", "Shoulder Press"];
+const list = document.getElementById("exerciseList");
 
-const user = localStorage.getItem("currentUser");
-document.getElementById("username").innerText = user + "'s Workout";
+function render() {
+  list.innerHTML = "";
+  const exercises = getExercises();
 
-const table = document.getElementById("tableBody");
+  exercises.forEach((ex, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
 
-exercises.forEach(ex => {
-  const row = document.createElement("tr");
+    // Name input
+    const nameInput = document.createElement("input");
+    nameInput.className = "exercise-name";
+    nameInput.value = ex;
 
-  const nameCell = document.createElement("td");
-  nameCell.innerText = ex;
+    nameInput.addEventListener("change", () => {
+      exercises[index] = nameInput.value;
+      saveExercises(exercises);
+      render();
+    });
 
-  const weightCell = document.createElement("td");
-  const input = document.createElement("input");
-  input.type = "number";
+    // Row
+    const row = document.createElement("div");
+    row.className = "row";
 
-  const key = user + "_" + ex;
+    // Weight input
+    const weightInput = document.createElement("input");
+    weightInput.type = "number";
+    weightInput.className = "weight-input";
 
-  // Load saved value
-  input.value = localStorage.getItem(key) || "";
+    const key = user + "_" + ex;
+    weightInput.value = localStorage.getItem(key) || "";
 
-  // Save on change
-  input.addEventListener("input", () => {
-    localStorage.setItem(key, input.value);
+    weightInput.addEventListener("input", () => {
+      localStorage.setItem(key, weightInput.value);
+    });
+
+    // Delete button
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-btn";
+    deleteBtn.innerText = "Delete";
+
+    deleteBtn.onclick = () => {
+      exercises.splice(index, 1);
+      saveExercises(exercises);
+      render();
+    };
+
+    row.appendChild(weightInput);
+    row.appendChild(deleteBtn);
+
+    card.appendChild(nameInput);
+    card.appendChild(row);
+
+    list.appendChild(card);
   });
-
-  weightCell.appendChild(input);
-
-  row.appendChild(nameCell);
-  row.appendChild(weightCell);
-  table.appendChild(row);
-});
+}

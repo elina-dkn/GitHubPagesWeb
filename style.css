@@ -1,0 +1,63 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 15px;
+  background: #f5f5f5;
+}
+
+h2 {
+  text-align: center;
+}
+
+/* Add bar */
+.add-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.add-bar input {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+}
+
+.add-bar button {
+  padding: 12px 16px;
+  font-size: 16px;
+}
+
+/* Exercise cards */
+.card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.exercise-name {
+  width: 100%;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weight-input {
+  width: 80px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.delete-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+}

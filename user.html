@@ -2,17 +2,19 @@
 <html>
 <head>
   <title>Workout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1 id="username"></h1>
 
-  <table border="1">
-    <tr>
-      <th>Exercise</th>
-      <th>Weight</th>
-    </tr>
-    <tbody id="tableBody"></tbody>
-  </table>
+  <h2 id="username"></h2>
+
+  <div class="add-bar">
+    <input type="text" id="newExercise" placeholder="New exercise">
+    <button onclick="addExercise()">Add</button>
+  </div>
+
+  <div id="exerciseList"></div>
 
   <script src="script.js"></script>
 </body>
