@@ -2,12 +2,17 @@
 <html>
 <head>
   <title>Gym Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <h1>Select User</h1>
 
-  <button onclick="selectUser('elina')">Elina</button>
-  <button onclick="selectUser('alex')">Alex</button>
+  <div class="user-list">
+    <button class="user-card" onclick="selectUser('elina')">Elina</button>
+    <button class="user-card" onclick="selectUser('alex')">Alex</button>
+  </div>
 
   <script>
     function selectUser(user) {
@@ -15,5 +20,6 @@
       window.location.href = "user.html";
     }
   </script>
+
 </body>
 </html>
