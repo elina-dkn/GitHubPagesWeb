@@ -1,3 +1,19 @@
+const user = localStorage.getItem("currentUser");
+document.getElementById("username").innerText = user + "'s Workout";
+
+const table = document.getElementById("tableBody");
+
+// Load exercises or create default
+function getExercises() {
+  let data = localStorage.getItem(user + "_exercises");
+  return data ? JSON.parse(data) : ["Bench Press", "Squat"];
+}
+
+function saveExercises(exercises) {
+  localStorage.setItem(user + "_exercises", JSON.stringify(exercises));
+}
+
+// Render table
 const list = document.getElementById("exerciseList");
 
 function render() {
@@ -55,3 +71,21 @@ function render() {
     list.appendChild(card);
   });
 }
+
+// Add new exercise
+function addExercise() {
+  const input = document.getElementById("newExercise");
+  const value = input.value.trim();
+
+  if (!value) return;
+
+  const exercises = getExercises();
+  exercises.push(value);
+
+  saveExercises(exercises);
+  input.value = "";
+  render();
+}
+
+// Initial render
+render();
